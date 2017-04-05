@@ -2,7 +2,7 @@ organization := "com.esri"
 
 name := "grid-hex"
 
-version := "1.0"
+version := "1.1"
 
 isSnapshot := true
 
@@ -12,7 +12,14 @@ crossScalaVersions := Seq("2.10.6", "2.11.7")
 
 resolvers += "Local Maven Repository" at "file:///" + Path.userHome + "/.m2/repository"
 
-pomExtra := (
+mainClass in (run) := Some("com.esri.HexApp")
+
+libraryDependencies ++= Seq(
+  "org.scalatest" %% "scalatest" % "3.0.1" % "test",
+  "com.beust" % "jcommander" % "1.64" % "compile"
+)
+
+pomExtra :=
   <url>https://github.com/mraad/grid-hex</url>
     <licenses>
       <license>
@@ -32,9 +39,4 @@ pomExtra := (
         <url>https://github.com/mraad</url>
         <email>mraad@esri.com</email>
       </developer>
-    </developers>)
-
-mainClass in (run) := Some("com.esri.HexApp")
-
-libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.1" % "test"
-libraryDependencies += "com.beust" % "jcommander" % "1.64" % "compile"
+    </developers>

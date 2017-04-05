@@ -24,7 +24,7 @@ object HexApp extends App {
 
   val bi = new BufferedImage(appParam.imgW, appParam.imgH, BufferedImage.TYPE_INT_RGB)
 
-  implicit val layout = Layout(appParam.sizeX, appParam.sizeY, bi.getWidth / 2, bi.getHeight / 2)
+  implicit val layout = Layout(bi.getWidth / 2, bi.getHeight / 2, appParam.sizeX, appParam.sizeY)
 
   val hex = Hex.fromXY(appParam.x, appParam.y)
 

@@ -5,13 +5,13 @@ import scala.collection.mutable.ArrayBuffer
 /**
   * Class to convert hex coordinate to and from world coordinates.
   *
-  * @param sizeX       the hex x size.
-  * @param sizeY       the hex y size.
   * @param origX       the world x origin.
   * @param origY       the world y origin.
+  * @param sizeX       the hex x size.
+  * @param sizeY       the hex y size.
   * @param orientation the hex orientation (flat top or pointy top).
   */
-case class Layout(sizeX: Double, sizeY: Double, origX: Double, origY: Double, orientation: Orientation = Orientation.TOP_FLAT) {
+case class Layout(origX: Double, origY: Double, sizeX: Double, sizeY: Double, orientation: Orientation = Orientation.TOP_FLAT) {
 
   /**
     * Convert a hex coordinate to world coordinates.
