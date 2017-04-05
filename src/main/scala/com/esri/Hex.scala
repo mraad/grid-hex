@@ -10,7 +10,7 @@ import scala.math._
   * @param r the row component.
   * @param s the z component.
   */
-case class Hex(q: Int, r: Int, s: Int) {
+case class Hex(q: Int, r: Int, s: Int) extends Ordered[Hex] {
 
   /**
     * Add this Hex to another Hex.
@@ -110,6 +110,18 @@ case class Hex(q: Int, r: Int, s: Int) {
     }
   }
 
+  /**
+    * Compare this q/r to that q/r
+    *
+    * @param that the Hex to compare with.
+    * @return -1 if less, 1 if greater, 0 otherwise.
+    */
+  override def compare(that: Hex): Int = {
+    this.q compare that.q match {
+      case 0 => this.r compare that.r
+      case c => c
+    }
+  }
 }
 
 object Hex extends Serializable {

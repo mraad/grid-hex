@@ -13,6 +13,11 @@ class LayoutSpec extends FlatSpec with Matchers {
     hex.s shouldBe -30
   }
 
+  it should "work on web coordinates" in {
+    implicit val layout = Layout(0.0, 0.0, 1000, 1000, Orientation.TOP_FLAT)
+
+  }
+
   it should "work on geo coordinates" in {
     implicit val layout = Layout(0.0, 0.0, 1, 1, Orientation.TOP_FLAT)
 
