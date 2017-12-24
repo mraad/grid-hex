@@ -16,7 +16,7 @@ case class FractionalHex(q: Double, r: Double, s: Double) {
     *
     * @return a rounded Hex instance.
     */
-  def toHex() = {
+  def toHex(): Hex = {
     var qInt = q.round.toInt
     var rInt = r.round.toInt
     var sInt = s.round.toInt

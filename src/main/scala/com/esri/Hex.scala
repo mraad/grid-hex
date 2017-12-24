@@ -18,7 +18,7 @@ case class Hex(q: Int, r: Int, s: Int) extends Ordered[Hex] {
     * @param that the Hex to add.
     * @return a new Hex instance with component sum.
     */
-  def +(that: Hex) = {
+  def +(that: Hex): Hex = {
     Hex(this.q + that.q, this.r + that.r, this.s + that.s)
   }
 
@@ -28,7 +28,7 @@ case class Hex(q: Int, r: Int, s: Int) extends Ordered[Hex] {
     * @param that the hex to subtract.
     * @return a new Hex instance with component difference.
     */
-  def -(that: Hex) = {
+  def -(that: Hex): Hex = {
     Hex(this.q - that.q, this.r - that.r, this.s - that.s)
   }
 
@@ -38,7 +38,7 @@ case class Hex(q: Int, r: Int, s: Int) extends Ordered[Hex] {
     * @param dir the direction of the neighbor. Should be [0 and 5].
     * @return the hex neighbor.
     */
-  def neighbor(dir: Int) = {
+  def neighbor(dir: Int): Hex = {
     // TODO Assert dir in [0 to 5]
     this + Hex.neighborArr(dir)
   }
@@ -48,7 +48,7 @@ case class Hex(q: Int, r: Int, s: Int) extends Ordered[Hex] {
     *
     * @return the manhattan distance.
     */
-  def length() = {
+  def length(): Int = {
     (abs(q) + abs(r) + abs(s)) / 2
   }
 
@@ -58,7 +58,7 @@ case class Hex(q: Int, r: Int, s: Int) extends Ordered[Hex] {
     * @param that the Hex to calculate the distance to.
     * @return the manhattan distance.
     */
-  def distance(that: Hex) = {
+  def distance(that: Hex): Int = {
     (that - this).length
   }
 

@@ -10,22 +10,22 @@ case class Orientation(
                         b0: Double, b1: Double, b2: Double, b3: Double,
                         startAngle: Double
                       ) {
-  private val Pi3 = Pi / 3.0
+  private val Pi_over_3 = Pi / 3.0
   val offsetX = Array(
-    cos(Pi3 * (startAngle - 0)),
-    cos(Pi3 * (startAngle - 1)),
-    cos(Pi3 * (startAngle - 2)),
-    cos(Pi3 * (startAngle - 3)),
-    cos(Pi3 * (startAngle - 4)),
-    cos(Pi3 * (startAngle - 5))
+    cos(Pi_over_3 * (startAngle - 0)),
+    cos(Pi_over_3 * (startAngle - 1)),
+    cos(Pi_over_3 * (startAngle - 2)),
+    cos(Pi_over_3 * (startAngle - 3)),
+    cos(Pi_over_3 * (startAngle - 4)),
+    cos(Pi_over_3 * (startAngle - 5))
   )
   val offsetY = Array(
-    sin(Pi3 * (startAngle - 0)),
-    sin(Pi3 * (startAngle - 1)),
-    sin(Pi3 * (startAngle - 2)),
-    sin(Pi3 * (startAngle - 3)),
-    sin(Pi3 * (startAngle - 4)),
-    sin(Pi3 * (startAngle - 5))
+    sin(Pi_over_3 * (startAngle - 0)),
+    sin(Pi_over_3 * (startAngle - 1)),
+    sin(Pi_over_3 * (startAngle - 2)),
+    sin(Pi_over_3 * (startAngle - 3)),
+    sin(Pi_over_3 * (startAngle - 4)),
+    sin(Pi_over_3 * (startAngle - 5))
   )
 }
 

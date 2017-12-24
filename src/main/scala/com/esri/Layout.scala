@@ -32,7 +32,7 @@ case class Layout(origX: Double, origY: Double, sizeX: Double, sizeY: Double, or
     * @param y the world y coordinate.
     * @return a FractionalHex instance.
     */
-  def xyToHex(x: Double, y: Double) = {
+  def xyToHex(x: Double, y: Double): FractionalHex = {
     val px = (x - origX) / sizeX
     val py = (y - origY) / sizeY
     val q = orientation.b0 * px + orientation.b1 * py
@@ -48,7 +48,7 @@ case class Layout(origX: Double, origY: Double, sizeX: Double, sizeY: Double, or
     * @param cy     the hex center vertical world location.
     * @return (x,y)
     */
-  def cornerOffset(corner: Int, cx: Double, cy: Double) = {
+  def cornerOffset(corner: Int, cx: Double, cy: Double): (Double, Double) = {
     (cx + sizeX * orientation.offsetX(corner), cy + sizeY * orientation.offsetY(corner))
   }
 
