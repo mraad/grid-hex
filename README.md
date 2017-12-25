@@ -15,7 +15,7 @@ This library implements the following functions:
 The build process is based on [sbt](http://www.scala-sbt.org/).
 
 ```
-sbt +publishM2
+sbt clean cleanFiles transitiveUpdate +publishM2 +publishLocal
 ```
 
 ## Hex Viewer

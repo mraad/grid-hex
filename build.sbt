@@ -2,22 +2,19 @@ organization := "com.esri"
 
 name := "grid-hex"
 
-version := "1.2"
+version := "1.3"
 
 isSnapshot := true
 
-publishMavenStyle := true
-
 crossScalaVersions := Seq("2.10.6", "2.11.8")
 
-// resolvers += "Local Maven Repository" at "file:///" + Path.userHome + "/.m2/repository"
 resolvers += Resolver.mavenLocal
 
 mainClass in (run) := Some("com.esri.HexApp")
 
 libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "3.0.4" % "test",
-  "com.beust" % "jcommander" % "1.72" % "compile"
+  "com.beust" % "jcommander" % "1.72" % "compile,runtime"
 )
 
 pomExtra :=
