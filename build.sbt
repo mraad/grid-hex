@@ -2,11 +2,13 @@ organization := "com.esri"
 
 name := "grid-hex"
 
-version := "1.3"
+version := "1.5"
 
 isSnapshot := true
 
-crossScalaVersions := Seq("2.10.6", "2.11.8")
+publishMavenStyle := true
+
+crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.8")
 
 resolvers += Resolver.mavenLocal
 
