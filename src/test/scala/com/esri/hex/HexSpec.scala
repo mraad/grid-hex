@@ -1,4 +1,4 @@
-package com.esri
+package com.esri.hex
 
 import org.scalatest.{FlatSpec, Matchers}
 

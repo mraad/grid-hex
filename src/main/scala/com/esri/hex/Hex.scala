@@ -1,4 +1,4 @@
-package com.esri
+package com.esri.hex
 
 import scala.collection.mutable.ArrayBuffer
 import scala.math._

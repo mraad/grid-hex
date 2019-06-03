@@ -1,11 +1,11 @@
-package com.esri
+package com.esri.hex
 
 import java.awt.image.BufferedImage
 import java.awt.{Color, Graphics2D, RenderingHints}
 import java.io.FileOutputStream
-import javax.imageio.ImageIO
 
 import com.beust.jcommander.JCommander
+import javax.imageio.ImageIO
 
 /**
   * Simple app to help in visualizing world to hex conversion and range calculation.

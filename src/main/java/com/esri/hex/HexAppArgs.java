@@ -1,4 +1,4 @@
-package com.esri;
+package com.esri.hex;
 
 import com.beust.jcommander.Parameter;
 
