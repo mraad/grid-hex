@@ -41,14 +41,7 @@ case class Layout(origX: Double, origY: Double, sizeX: Double, sizeY: Double, or
     FractionalHex(q, r, -q - r)
   }
 
-  /**
-    * Convert world coordinate to a QR hex key.
-    *
-    * @param x the world x coordinate.
-    * @param y the world y coordinate.
-    * @return a key as a String instance.
-    */
-  def xyToKey(x: Double, y: Double): String = {
+  private def xy2qr(x: Double, y: Double): (Int, Int) = {
     val px = (x - origX) / sizeX
     val py = (y - origY) / sizeY
     val q = orientation.b0 * px + orientation.b1 * py
@@ -65,7 +58,40 @@ case class Layout(origX: Double, origY: Double, sizeX: Double, sizeY: Double, or
 
     if (qAbs > rAbs && qAbs > sAbs) qInt = -rInt - sInt
     else if (rAbs > sAbs) rInt = -qInt - sInt
+    (qInt, rInt)
+  }
+
+  /**
+    * Convert world coordinate to a QR hex key.
+    *
+    * @param x the world x coordinate.
+    * @param y the world y coordinate.
+    * @return a key as a String instance.
+    */
+  def xyToKey(x: Double, y: Double): String = {
+    //    val px = (x - origX) / sizeX
+    //    val py = (y - origY) / sizeY
+    //    val q = orientation.b0 * px + orientation.b1 * py
+    //    val r = orientation.b2 * px + orientation.b3 * py
+    //    val s = -q - r
+    //
+    //    var qInt = q.round.toInt
+    //    var rInt = r.round.toInt
+    //    val sInt = s.round.toInt
+    //
+    //    val qAbs = abs(qInt - q)
+    //    val rAbs = abs(rInt - r)
+    //    val sAbs = abs(sInt - s)
+    //
+    //    if (qAbs > rAbs && qAbs > sAbs) qInt = -rInt - sInt
+    //    else if (rAbs > sAbs) rInt = -qInt - sInt
+    val (qInt, rInt) = xy2qr(x, y)
     s"$qInt:$rInt"
+  }
+
+  def xyToNume(x: Double, y: Double): Long = {
+    val (qInt, rInt) = xy2qr(x, y)
+    (qInt << 32) | (rInt & 0xFFFFFFFF)
   }
 
   /**
