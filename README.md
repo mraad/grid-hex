@@ -10,6 +10,12 @@ This library implements the following functions:
 - Get a sequence of the Hex corners in world coordinates.
 - Get a sequence of Hexes that are within a user defined range from a given Hex.
 
+## Python
+
+```
+python setup install
+```
+
 ## Building the Project
 
 The build process is based on [sbt](http://www.scala-sbt.org/).
