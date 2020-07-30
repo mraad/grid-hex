@@ -1,8 +1,23 @@
-"""
-    Minimalistic Hex as describe in http://www.redblobgames.com/grids/hexagons/implementation.html
+"""Minimalistic Hex as describe in http://www.redblobgames.com/grids/hexagons/implementation.html.
 """
 
 import math
+
+
+class WebMercator(object):
+    def __init__(self):
+        self.RAD = 6378137.0
+        self.RAD2 = self.RAD * 0.5
+        self.LON = self.RAD * math.pi / 180.0
+        self.D2R = math.pi / 180.0
+
+    def lonToX(self, l):
+        return l * self.LON
+
+    def latToY(self, l):
+        rad = l * self.D2R
+        sin = math.sin(rad)
+        return self.RAD2 * math.log((1.0 + sin) / (1.0 - sin))
 
 
 class Pixel:
@@ -39,11 +54,14 @@ class Hex:
     def to_key(self):
         return "{}:{}".format(self.q, self.r)
 
+    def to_nume(self):
+        return (self.q << 32) | self.r
+
     def to_shape(self, layout):
         pix = layout.to_pixel(self)
         return layout.to_shape(pix.x, pix.y)
 
-    def round(self):
+    def _round(self):
         q = int(round(self.q))
         r = int(round(self.r))
         s = int(round(self.s))
@@ -54,6 +72,10 @@ class Hex:
             q = -r - s
         elif r_diff > s_diff:
             r = -q - s
+        return q, r
+
+    def round(self):
+        q, r = self._round()
         return Hex(q, r)
 
 
@@ -109,6 +131,9 @@ class Layout:
 
     def to_key(self, x, y):
         return self.to_hex(x, y).to_key()
+
+    def to_nume(self, x, y):
+        return self.to_hex(x, y).to_nume()
 
     def to_shape(self, cx, cy):
         return [[cx + x, cy + y] for (x, y) in self.xy]
