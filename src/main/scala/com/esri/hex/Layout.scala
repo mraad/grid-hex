@@ -14,6 +14,13 @@ import scala.math.abs
   */
 case class Layout(origX: Double, origY: Double, sizeX: Double, sizeY: Double, orientation: Orientation = Orientation.TOP_FLAT) {
 
+  @inline
+  private def qr2xy(q: Int, r: Int): (Double, Double) = {
+    val x = (orientation.f0 * q + orientation.f1 * r) * sizeX
+    val y = (orientation.f2 * q + orientation.f3 * r) * sizeY
+    (x + origX, y + origY)
+  }
+
   /**
     * Convert a hex coordinate to world coordinates.
     *
@@ -21,9 +28,10 @@ case class Layout(origX: Double, origY: Double, sizeX: Double, sizeY: Double, or
     * @return (x,y)
     */
   def hexToXY(h: Hex): (Double, Double) = {
-    val x = (orientation.f0 * h.q + orientation.f1 * h.r) * sizeX
-    val y = (orientation.f2 * h.q + orientation.f3 * h.r) * sizeY
-    (x + origX, y + origY)
+    //    val x = (orientation.f0 * h.q + orientation.f1 * h.r) * sizeX
+    //    val y = (orientation.f2 * h.q + orientation.f3 * h.r) * sizeY
+    //    (x + origX, y + origY)
+    qr2xy(h.q, h.r)
   }
 
   /**
@@ -72,6 +80,21 @@ case class Layout(origX: Double, origY: Double, sizeX: Double, sizeY: Double, or
   def xyToKey(x: Double, y: Double): String = {
     val (qInt, rInt) = xy2qr(x, y)
     s"$qInt:$rInt"
+  }
+
+  /**
+    * Convert QR key hex value to world coordinates.
+    *
+    * @param key the hex key.
+    * @return Tuple[x,y]
+    */
+  def keyToXY(key: String): (Double, Double) = {
+    key.split(':') match {
+      case Array(q, r) => {
+        qr2xy(q.toInt, r.toInt)
+      }
+      case _ => (0.0, 0.0)
+    }
   }
 
   /**
