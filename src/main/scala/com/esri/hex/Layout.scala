@@ -71,24 +71,24 @@ case class Layout(origX: Double, origY: Double, sizeX: Double, sizeY: Double, or
   }
 
   /**
-    * Convert world coordinate to a QR hex key.
+    * Convert world coordinate to a QR hex text (q:r).
     *
     * @param x the world x coordinate.
     * @param y the world y coordinate.
-    * @return a key as a String instance.
+    * @return a key as a String instance (q:r).
     */
-  def xyToKey(x: Double, y: Double): String = {
+  def xyToText(x: Double, y: Double): String = {
     val (qInt, rInt) = xy2qr(x, y)
     s"$qInt:$rInt"
   }
 
   /**
-    * Convert QR key hex value to world coordinates.
+    * Convert QR text hex value to world coordinates.
     *
     * @param key the hex key.
     * @return Tuple[x,y]
     */
-  def keyToXY(key: String): (Double, Double) = {
+  def textToXY(key: String): (Double, Double) = {
     key.split(':') match {
       case Array(q, r) => {
         qr2xy(q.toInt, r.toInt)
@@ -107,6 +107,18 @@ case class Layout(origX: Double, origY: Double, sizeX: Double, sizeY: Double, or
   def xyToNume(x: Double, y: Double): Long = {
     val (qInt, rInt) = xy2qr(x, y)
     (qInt.toLong << 32) | (rInt.toLong & 0xFFFFFFFFL)
+  }
+
+  /**
+    * Convert QR hex nume to world coordinates.
+    *
+    * @param nume the qr nume value.
+    * @return (x,y)
+    */
+  def numeToXY(nume: Long): (Double, Double) = {
+    val q = nume >> 32
+    val r = nume & 0xFFFFFFFFL
+    qr2xy(q.toInt, r.toInt)
   }
 
   /**
