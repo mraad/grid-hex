@@ -1,8 +1,9 @@
 """Minimalistic Hex as describe in http://www.redblobgames.com/grids/hexagons/implementation.html.
 """
 
-from typing import List, Tuple, Union
 import math
+from typing import List, Tuple, Union
+
 from numba import jit
 
 
@@ -10,15 +11,16 @@ class WebMercator(object):
     """Class to convert lon/lat to mercator x/y.
     """
 
+    @jit(nopython=True)
     def __init__(self) -> None:
         """Initialize instance.
         """
-        self.RAD = 6378137.0
-        self.RAD2 = self.RAD * 0.5
-        self.LON = self.RAD * math.pi / 180.0
-        self.D2R = math.pi / 180.0
+        self.RAD: float = 6378137.0
+        self.RAD2: float = self.RAD * 0.5
+        self.LON: float = self.RAD * math.pi / 180.0
+        self.D2R: float = math.pi / 180.0
 
-    @jit
+    @jit(nopython=True)
     def lon_to_x(self, lon: float) -> float:
         """Geo Lon to X meters.
 
@@ -27,15 +29,15 @@ class WebMercator(object):
         """
         return lon * self.LON
 
-    @jit
+    @jit(nopython=True)
     def lat_to_y(self, lat: float) -> float:
         """Geo Lat to Y meters.
 
         :param lat: latitude value.
         :return: y in meters.
         """
-        rad = lat * self.D2R
-        sin = math.sin(rad)
+        rad: float = lat * self.D2R
+        sin: float = math.sin(rad)
         return self.RAD2 * math.log((1.0 + sin) / (1.0 - sin))
 
 
@@ -82,29 +84,27 @@ class Layout:
         :param orientation: The hex orientation.
         :param orig: The layout origin.
         """
-        self.size = size
-        self.orientation = orientation
+        self.size: float = size
+        self.orientation: Orientation = orientation
         self.orig_x, self.orig_y = orig
-        self.xy = []
+        self.xy: List[Tuple[float, float]] = []
         for i in range(7):
             angle = math.pi * ((i % 6) + orientation.ang) / 3.0
             x = size * math.cos(angle)
             y = size * math.sin(angle)
             self.xy.append((x, y))
 
-    @jit
     def to_xy(self, hex_qr: 'Hex') -> Tuple[float, float]:
         """Concert Hex to x,y.
 
         :param hex_qr: A Hex instance.
         :return Tuple[x,y]
         """
-        m = self.orientation
-        x = (m.f0 * hex_qr.q + m.f1 * hex_qr.r) * self.size
-        y = (m.f2 * hex_qr.q + m.f3 * hex_qr.r) * self.size
+        m: Orientation = self.orientation
+        x: float = (m.f0 * hex_qr.q + m.f1 * hex_qr.r) * self.size
+        y: float = (m.f2 * hex_qr.q + m.f3 * hex_qr.r) * self.size
         return x + self.orig_x, y + self.orig_y
 
-    @jit
     def to_hex(self, x: float, y: float) -> 'Hex':
         """Convert x,y values to Hex instance."""
         m = self.orientation
@@ -114,7 +114,6 @@ class Layout:
         r = m.b2 * px + m.b3 * py
         return Hex(q, r).round()
 
-    @jit
     def to_text(self, x: float, y: float) -> str:
         """Convert x,y to hex text instance.
 
@@ -124,7 +123,6 @@ class Layout:
         """
         return self.to_hex(x, y).to_text()
 
-    @jit
     def to_nume(self, x: float, y: float) -> int:
         """Convert x,y to hex nume instance.
 
@@ -200,7 +198,7 @@ class Hex:
         x, y = layout.to_xy(self)
         return layout.to_coords(x, y)
 
-    @jit
+    @jit(nopython=True)
     def _round(self) -> Tuple[int, int]:
         q = int(round(self.q))
         r = int(round(self.r))
