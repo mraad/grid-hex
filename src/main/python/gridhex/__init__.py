@@ -134,7 +134,6 @@ class Layout:
         """
         return self.to_hex(x, y).to_nume()
 
-    @jit
     def to_coords(self, cx: float, cy: float) -> List[Tuple[float, float]]:
         """Return the hex outline coords.
 
@@ -159,7 +158,6 @@ class Hex:
         self.r = r
         self.s = -q - r
 
-    @jit
     @staticmethod
     def from_text(text: str) -> 'Hex':
         """Create Hex instance from text value (q:r).
@@ -169,7 +167,6 @@ class Hex:
         r = int(rhs)
         return Hex(q, r)
 
-    @jit
     @staticmethod
     def from_nume(nume: int) -> 'Hex':
         """Create Hex instance from nume value.
