@@ -9,7 +9,7 @@ import scala.math._
   * @param r the row component.
   * @param s the cube s or z component.
   */
-case class FractionalHex(q: Double, r: Double, s: Double) {
+case class HexDouble(q: Double, r: Double, s: Double) {
 
   /**
     * Convert to Hex instance by rounding.

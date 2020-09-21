@@ -10,33 +10,38 @@ This library implements the following functions:
 - Get a sequence of the Hex corners in world coordinates.
 - Get a sequence of Hexes that are within a user defined range from a given Hex.
 
-## Python
+## Building the Project
+
+```
+mvn clean install
+```
+
+Install python modules:
 
 ```
 python setup install
 ```
 
-## Building the Project
-
-The build process is based on [sbt](http://www.scala-sbt.org/).
+~~The build process is based on [sbt](http://www.scala-sbt.org/).~~
 
 ```
 sbt clean cleanFiles transitiveUpdate +publishM2 +publishLocal
 ```
 
-## Hex Viewer
+## ~~Hex Viewer~~
 
-`HexApp` is a simple CLI application to view the above functions in action.
+~~`HexApp` is a simple CLI application to view the above functions in action.~~
 
-View the app usage using:
+~~View the app usage using:~~
 
 ```
 sbt "run -help"
 ```
 
-The following is a sample execution:
+~~The following is a sample execution:~~
 
 ```
 sbt "run -w 400 -h 400 -x 253 -y 177 -r 3 -o /tmp/test.png" && open /tmp/test.png
 ```
+
 ![](media/test.png)

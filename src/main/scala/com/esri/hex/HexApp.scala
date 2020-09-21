@@ -11,6 +11,7 @@ import javax.imageio.ImageIO
   * Simple app to help in visualizing world to hex conversion and range calculation.
   * The output is a PNG image.
   */
+@deprecated
 object HexApp extends App {
 
   System.setProperty("java.awt.headless", "true")

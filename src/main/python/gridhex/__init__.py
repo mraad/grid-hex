@@ -73,7 +73,7 @@ class Layout:
 
     def __init__(self,
                  size: float,
-                 orientation: Orientation,
+                 orientation: Orientation = top_flat,
                  orig: Tuple[float, float] = (-20_000_000.0, -20_000_000.0)
                  ) -> None:
         """Initialize this instance.

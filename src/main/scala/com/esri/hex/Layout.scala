@@ -28,9 +28,6 @@ case class Layout(origX: Double, origY: Double, sizeX: Double, sizeY: Double, or
     * @return (x,y)
     */
   def hexToXY(h: Hex): (Double, Double) = {
-    //    val x = (orientation.f0 * h.q + orientation.f1 * h.r) * sizeX
-    //    val y = (orientation.f2 * h.q + orientation.f3 * h.r) * sizeY
-    //    (x + origX, y + origY)
     qr2xy(h.q, h.r)
   }
 
@@ -41,12 +38,12 @@ case class Layout(origX: Double, origY: Double, sizeX: Double, sizeY: Double, or
     * @param y the world y coordinate.
     * @return a FractionalHex instance.
     */
-  def xyToHex(x: Double, y: Double): FractionalHex = {
+  def xyToHex(x: Double, y: Double): HexDouble = {
     val px = (x - origX) / sizeX
     val py = (y - origY) / sizeY
     val q = orientation.b0 * px + orientation.b1 * py
     val r = orientation.b2 * px + orientation.b3 * py
-    FractionalHex(q, r, -q - r)
+    HexDouble(q, r, -q - r)
   }
 
   @inline

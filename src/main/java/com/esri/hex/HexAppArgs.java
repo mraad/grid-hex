@@ -5,8 +5,8 @@ import com.beust.jcommander.Parameter;
 /**
  * The arguments for the HexApp application.
  */
-class HexAppArgs
-{
+@Deprecated
+class HexAppArgs {
     /**
      * Print usage.
      */
