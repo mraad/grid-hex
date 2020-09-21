@@ -4,3 +4,4 @@ dist
 gridhex.egg-info
 target
 *.iml
+*.sh
