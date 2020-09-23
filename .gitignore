@@ -3,5 +3,6 @@ build
 dist
 gridhex.egg-info
 target
+project/target
 *.iml
 *.sh
