@@ -4,5 +4,6 @@ dist
 gridhex.egg-info
 target
 project/target
+toolbox/*.xml
 *.iml
 *.sh
