@@ -4,7 +4,7 @@ from setuptools import find_packages, setup
 where = os.path.join("src", "main", "python")
 setup(
     name='gridhex',
-    version='2.4',
+    version='2.5',
     description='Minimalistic Hex as describe in http://www.redblobgames.com/grids/hexagons/implementation.html',
     author='Mansour Raad',
     author_email='mraad@esri.com',
