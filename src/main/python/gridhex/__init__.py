@@ -2,7 +2,7 @@
 """
 
 import math
-from typing import List, Tuple, Union
+from typing import List, Tuple, Union, Dict
 
 from numba import jit
 
@@ -197,6 +197,34 @@ class Hex:
         """
         x, y = layout.to_xy(self)
         return layout.to_coords(x, y)
+
+    def to_json(self, layout: Layout) -> Dict:
+        """Return Esri JSON representation of the hex.
+
+        :param layout: The hex layout.
+        :return: Esri JSON representation.
+        """
+        rings = [[[x, y] for x, y in self.to_coords(layout)]]
+        return {"rings": rings, "spatialReference": {"wkid": 3857}}
+
+    def to_geojson(self, layout: Layout) -> Dict:
+        """Return GeoJSON representation of the hex.
+
+        Note: The spatial reference of the data will be in WGS84.
+
+        :param layout: The hex layout.
+        :return: GeoJSON representation.
+        """
+
+        def x_to_lon(x: float) -> float:
+            return (x / 6378137.0) * (180.0 / math.pi)
+
+        def y_to_lat(y: float) -> float:
+            rad = math.pi / 2.0 - (2.0 * math.atan(math.exp(-1.0 * y / 6378137.0)))
+            return rad * 180.0 / math.pi
+
+        coordinates = [[[x_to_lon(x), y_to_lat(y)] for x, y in self.to_coords(layout)]]
+        return {"type": "Polygon", "coordinates": coordinates}
 
     @jit(nopython=True)
     def _round(self) -> Tuple[int, int]:
