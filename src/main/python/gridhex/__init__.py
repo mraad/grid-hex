@@ -11,7 +11,6 @@ class WebMercator(object):
     """Class to convert lon/lat to mercator x/y.
     """
 
-    @jit(nopython=True)
     def __init__(self) -> None:
         """Initialize instance.
         """
@@ -20,25 +19,33 @@ class WebMercator(object):
         self.LON: float = self.RAD * math.pi / 180.0
         self.D2R: float = math.pi / 180.0
 
-    @jit(nopython=True)
     def lon_to_x(self, lon: float) -> float:
         """Geo Lon to X meters.
 
         :param lon: longitude value.
         :return: x in meters.
         """
-        return lon * self.LON
 
-    @jit(nopython=True)
+        @jit(nopython=True)
+        def _lon_to_x(_lon: float) -> float:
+            return lon * _lon
+
+        return _lon_to_x(self.LON)
+
     def lat_to_y(self, lat: float) -> float:
         """Geo Lat to Y meters.
 
         :param lat: latitude value.
         :return: y in meters.
         """
-        rad: float = lat * self.D2R
-        sin: float = math.sin(rad)
-        return self.RAD2 * math.log((1.0 + sin) / (1.0 - sin))
+
+        @jit(nopython=True)
+        def _lat_to_y(_d2r: float, _rad2: float) -> float:
+            rad: float = lat * _d2r
+            sin: float = math.sin(rad)
+            return _rad2 * math.log((1.0 + sin) / (1.0 - sin))
+
+        return _lat_to_y(self.D2R, self.RAD2)
 
 
 class Orientation:
@@ -216,9 +223,11 @@ class Hex:
         :return: GeoJSON representation.
         """
 
+        @jit(nopython=True)
         def x_to_lon(x: float) -> float:
             return (x / 6378137.0) * (180.0 / math.pi)
 
+        @jit(nopython=True)
         def y_to_lat(y: float) -> float:
             rad = math.pi / 2.0 - (2.0 * math.atan(math.exp(-1.0 * y / 6378137.0)))
             return rad * 180.0 / math.pi
@@ -226,19 +235,22 @@ class Hex:
         coordinates = [[[x_to_lon(x), y_to_lat(y)] for x, y in self.to_coords(layout)]]
         return {"type": "Polygon", "coordinates": coordinates}
 
-    @jit(nopython=True)
     def _round(self) -> Tuple[int, int]:
-        q = int(round(self.q))
-        r = int(round(self.r))
-        s = int(round(self.s))
-        q_diff = abs(q - self.q)
-        r_diff = abs(r - self.r)
-        s_diff = abs(s - self.s)
-        if q_diff > r_diff and q_diff > s_diff:
-            q = -r - s
-        elif r_diff > s_diff:
-            r = -q - s
-        return q, r
+        @jit(nopython=True)
+        def __round(_q: float, _r: float, _s: float) -> Tuple[int, int]:
+            q = round(_q)
+            r = round(_r)
+            s = round(_s)
+            q_diff = abs(q - _q)
+            r_diff = abs(r - _r)
+            s_diff = abs(s - _s)
+            if q_diff > r_diff and q_diff > s_diff:
+                q = -r - s
+            elif r_diff > s_diff:
+                r = -q - s
+            return int(q), int(r)
+
+        return __round(float(self.q), float(self.r), float(self.s))
 
     def round(self) -> 'Hex':
         """Round this hex.
