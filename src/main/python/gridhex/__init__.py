@@ -2,7 +2,7 @@
 """
 
 import math
-from typing import List, Tuple, Union, Dict
+from typing import Dict, List, Tuple
 
 from numba import jit
 
@@ -112,14 +112,46 @@ class Layout:
         y: float = (m.f2 * hex_qr.q + m.f3 * hex_qr.r) * self.size
         return x + self.orig_x, y + self.orig_y
 
-    def to_hex(self, x: float, y: float) -> 'Hex':
-        """Convert x,y values to Hex instance."""
+    def to_qr(self, x: float, y: float) -> Tuple[int, int]:
+        """Convert x,y values to q,r tuple.
+
+        :param x: The x world value.
+        :param y: The y world value.
+        :return: Tuple[q,r]
+        """
+
+        @jit(nopython=True)
+        def _to_qr(orig_x: float, orig_y: float, size: float,
+                   b0: float, b1: float, b2: float, b3: float) -> Tuple[int, int]:
+            px = (x - orig_x) / size
+            py = (y - orig_y) / size
+            mq = b0 * px + b1 * py
+            mr = b2 * px + b3 * py
+            ms = -mq - mr
+            q = round(mq)
+            r = round(mr)
+            s = round(ms)
+            q_diff = abs(q - mq)
+            r_diff = abs(r - mr)
+            s_diff = abs(s - ms)
+            if q_diff > r_diff and q_diff > s_diff:
+                q = -r - s
+            elif r_diff > s_diff:
+                r = -q - s
+            return int(q), int(r)
+
         m = self.orientation
-        px = (x - self.orig_x) / self.size
-        py = (y - self.orig_y) / self.size
-        q = m.b0 * px + m.b1 * py
-        r = m.b2 * px + m.b3 * py
-        return Hex(q, r).round()
+        return _to_qr(self.orig_x, self.orig_y, self.size, m.b0, m.b1, m.b2, m.b3)
+
+    def to_hex(self, x: float, y: float) -> 'Hex':
+        """Convert x,y values to Hex instance.
+
+        :param x: The x world value.
+        :param y: The y world value.
+        :return: Hex instance.
+        """
+        q, r = self.to_qr(x, y)
+        return Hex(q, r)
 
     def to_text(self, x: float, y: float) -> str:
         """Convert x,y to hex text instance.
@@ -128,7 +160,8 @@ class Layout:
         :param y: the y value.
         :return: hex as a string.
         """
-        return self.to_hex(x, y).to_text()
+        q, r = self.to_qr(x, y)
+        return f"{q}:{r}"
 
     def to_nume(self, x: float, y: float) -> int:
         """Convert x,y to hex nume instance.
@@ -137,7 +170,8 @@ class Layout:
         :param y: the y value.
         :return: hex as an int.
         """
-        return self.to_hex(x, y).to_nume()
+        q, r = self.to_qr(x, y)
+        return (q << 32) | r
 
     def to_coords(self, cx: float, cy: float) -> List[Tuple[float, float]]:
         """Return the hex outline coords.
@@ -153,7 +187,7 @@ class Hex:
     """Class to represent Hex cell.
     """
 
-    def __init__(self, q: Union[int, float], r: Union[int, float]) -> None:
+    def __init__(self, q: int, r: int) -> None:
         """Initialize instance.
 
         :param q: the q value.
@@ -161,7 +195,7 @@ class Hex:
         """
         self.q = q
         self.r = r
-        self.s = -q - r
+        # self.s = -q - r
 
     @staticmethod
     def from_text(text: str) -> 'Hex':
@@ -234,26 +268,3 @@ class Hex:
 
         coordinates = [[[x_to_lon(x), y_to_lat(y)] for x, y in self.to_coords(layout)]]
         return {"type": "Polygon", "coordinates": coordinates}
-
-    def _round(self) -> Tuple[int, int]:
-        @jit(nopython=True)
-        def __round(_q: float, _r: float, _s: float) -> Tuple[int, int]:
-            q = round(_q)
-            r = round(_r)
-            s = round(_s)
-            q_diff = abs(q - _q)
-            r_diff = abs(r - _r)
-            s_diff = abs(s - _s)
-            if q_diff > r_diff and q_diff > s_diff:
-                q = -r - s
-            elif r_diff > s_diff:
-                r = -q - s
-            return int(q), int(r)
-
-        return __round(float(self.q), float(self.r), float(self.s))
-
-    def round(self) -> 'Hex':
-        """Round this hex.
-        """
-        self.q, self.r = self._round()
-        return self
