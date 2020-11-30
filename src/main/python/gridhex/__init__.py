@@ -4,8 +4,6 @@
 import math
 from typing import Dict, List, Tuple
 
-from numba import jit
-
 
 class WebMercator(object):
     """Class to convert lon/lat to mercator x/y.
@@ -26,7 +24,7 @@ class WebMercator(object):
         :return: x in meters.
         """
 
-        @jit(nopython=True)
+        # @jit(nopython=True)
         def _lon_to_x(_lon: float) -> float:
             return lon * _lon
 
@@ -39,7 +37,7 @@ class WebMercator(object):
         :return: y in meters.
         """
 
-        @jit(nopython=True)
+        # @jit(nopython=True)
         def _lat_to_y(_d2r: float, _rad2: float) -> float:
             rad: float = lat * _d2r
             sin: float = math.sin(rad)
@@ -120,7 +118,7 @@ class Layout:
         :return: Tuple[q,r]
         """
 
-        @jit(nopython=True)
+        # @jit(nopython=True)
         def _to_qr(orig_x: float, orig_y: float, size: float,
                    b0: float, b1: float, b2: float, b3: float) -> Tuple[int, int]:
             px = (x - orig_x) / size
@@ -256,11 +254,11 @@ class Hex:
         :return: GeoJSON representation.
         """
 
-        @jit(nopython=True)
+        # @jit(nopython=True)
         def x_to_lon(x: float) -> float:
             return (x / 6378137.0) * (180.0 / math.pi)
 
-        @jit(nopython=True)
+        # @jit(nopython=True)
         def y_to_lat(y: float) -> float:
             rad = math.pi / 2.0 - (2.0 * math.atan(math.exp(-1.0 * y / 6378137.0)))
             return rad * 180.0 / math.pi
