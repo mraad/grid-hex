@@ -2,7 +2,7 @@ organization := "com.esri"
 
 name := "grid-hex"
 
-version := "2.6"
+version := "2.7"
 
 isSnapshot := true
 

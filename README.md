@@ -1,6 +1,6 @@
 # Grid Hex
 
-Minimalist Scala library to convert world coordinates to hex lattice coordinates based on <http://www.redblobgames.com/grids/hexagons> excellent reference [implementation](http://www.redblobgames.com/grids/hexagons/implementation.html).
+Minimalist Scala and Python library to convert world coordinates to hex lattice coordinates based on <http://www.redblobgames.com/grids/hexagons> excellent reference [implementation](http://www.redblobgames.com/grids/hexagons/implementation.html).
 
 ![](media/hex.png)
 
