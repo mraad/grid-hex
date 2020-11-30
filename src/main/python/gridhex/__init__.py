@@ -195,7 +195,6 @@ class Hex:
         """
         self.q = q
         self.r = r
-        # self.s = -q - r
 
     @staticmethod
     def from_text(text: str) -> 'Hex':
