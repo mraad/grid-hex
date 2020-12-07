@@ -39,8 +39,7 @@ class WebMercator(object):
 
         # @jit(nopython=True)
         def _lat_to_y(_d2r: float, _rad2: float) -> float:
-            rad: float = lat * _d2r
-            sin: float = math.sin(rad)
+            sin: float = math.sin(lat * _d2r)
             return _rad2 * math.log((1.0 + sin) / (1.0 - sin))
 
         return _lat_to_y(self.D2R, self.RAD2)

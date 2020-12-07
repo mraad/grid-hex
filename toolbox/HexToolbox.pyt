@@ -83,7 +83,7 @@ class ImportTextTool(object):
         if arcpy.Exists(fc):
             arcpy.management.Delete(fc)
 
-        spatial_reference = arcpy.SpatialReference(102100)
+        spatial_reference = arcpy.SpatialReference(3857)
         arcpy.management.CreateFeatureclass(ws,
                                             p_name,
                                             "POLYGON",
@@ -102,10 +102,9 @@ class ImportTextTool(object):
                         row = line.rstrip("\n").split("\t")
                         row[0] = Hex.from_nume(int(row[0])).to_coords(layout)
                         cursor.insertRow(row)
-        if "__PYT_SYMB__" in os.environ:
-            symbology = os.path.join(os.environ["__PYT_SYMB__"], p_name + ".lyrx")
-            if os.path.exists(symbology):
-                parameters[0].symbology = symbology
+        symbology = Path(__file__).parent / f"{p_name}.lyrx"
+        if symbology.exists():
+            parameters[0].symbology = str(symbology)
         parameters[0].value = fc
 
 
