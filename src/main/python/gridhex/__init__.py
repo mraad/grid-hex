@@ -12,10 +12,10 @@ class WebMercator(object):
     def __init__(self) -> None:
         """Initialize instance.
         """
-        self.RAD: float = 6378137.0
-        self.RAD2: float = self.RAD * 0.5
-        self.LON: float = self.RAD * math.pi / 180.0
-        self.D2R: float = math.pi / 180.0
+        self.RAD = 6378137.0
+        self.RAD2 = self.RAD * 0.5
+        self.LON = self.RAD * math.pi / 180.0
+        self.D2R = math.pi / 180.0
 
     def lon_to_x(self, lon: float) -> float:
         """Geo Lon to X meters.
@@ -25,10 +25,10 @@ class WebMercator(object):
         """
 
         # @jit(nopython=True)
-        def _lon_to_x(_lon: float) -> float:
-            return lon * _lon
+        # def _lon_to_x(_lon: float) -> float:
+        #     return lon * _lon
 
-        return _lon_to_x(self.LON)
+        return lon * self.LON
 
     def lat_to_y(self, lat: float) -> float:
         """Geo Lat to Y meters.
@@ -38,11 +38,12 @@ class WebMercator(object):
         """
 
         # @jit(nopython=True)
-        def _lat_to_y(_d2r: float, _rad2: float) -> float:
-            sin: float = math.sin(lat * _d2r)
-            return _rad2 * math.log((1.0 + sin) / (1.0 - sin))
+        # def _lat_to_y(_d2r: float, _rad2: float) -> float:
+        #     sin = math.sin(lat * _d2r)
+        #     return _rad2 * math.log((1.0 + sin) / (1.0 - sin))
 
-        return _lat_to_y(self.D2R, self.RAD2)
+        sin = math.sin(lat * self.D2R)
+        return self.RAD2 * math.log((1.0 + sin) / (1.0 - sin))
 
 
 class Orientation:
