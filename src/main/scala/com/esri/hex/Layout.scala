@@ -4,14 +4,14 @@ import scala.collection.mutable.ArrayBuffer
 import scala.math.abs
 
 /**
-  * Class to convert hex coordinate to and from world coordinates.
-  *
-  * @param origX       the world x origin.
-  * @param origY       the world y origin.
-  * @param sizeX       the hex x size.
-  * @param sizeY       the hex y size.
-  * @param orientation the hex orientation (flat top or pointy top).
-  */
+ * Class to convert hex coordinate to and from world coordinates.
+ *
+ * @param origX       the world x origin.
+ * @param origY       the world y origin.
+ * @param sizeX       the hex x size.
+ * @param sizeY       the hex y size.
+ * @param orientation the hex orientation (flat top or pointy top).
+ */
 case class Layout(origX: Double, origY: Double, sizeX: Double, sizeY: Double, orientation: Orientation = Orientation.TOP_FLAT) {
 
   @inline
@@ -22,22 +22,22 @@ case class Layout(origX: Double, origY: Double, sizeX: Double, sizeY: Double, or
   }
 
   /**
-    * Convert a hex coordinate to world coordinates.
-    *
-    * @param h the hex to convert
-    * @return (x,y)
-    */
+   * Convert a hex coordinate to world coordinates.
+   *
+   * @param h the hex to convert
+   * @return (x,y)
+   */
   def hexToXY(h: Hex): (Double, Double) = {
     qr2xy(h.q, h.r)
   }
 
   /**
-    * Convert world coordinate to a Hex instance.
-    *
-    * @param x the world x coordinate.
-    * @param y the world y coordinate.
-    * @return a FractionalHex instance.
-    */
+   * Convert world coordinate to a Hex instance.
+   *
+   * @param x the world x coordinate.
+   * @param y the world y coordinate.
+   * @return a FractionalHex instance.
+   */
   def xyToHex(x: Double, y: Double): HexDouble = {
     val px = (x - origX) / sizeX
     val py = (y - origY) / sizeY
@@ -68,23 +68,23 @@ case class Layout(origX: Double, origY: Double, sizeX: Double, sizeY: Double, or
   }
 
   /**
-    * Convert world coordinate to a QR hex text (q:r).
-    *
-    * @param x the world x coordinate.
-    * @param y the world y coordinate.
-    * @return a key as a String instance (q:r).
-    */
+   * Convert world coordinate to a QR hex text (q:r).
+   *
+   * @param x the world x coordinate.
+   * @param y the world y coordinate.
+   * @return a key as a String instance (q:r).
+   */
   def xyToText(x: Double, y: Double): String = {
     val (qInt, rInt) = xy2qr(x, y)
     s"$qInt:$rInt"
   }
 
   /**
-    * Convert QR text hex value to world coordinates.
-    *
-    * @param key the hex key.
-    * @return Tuple[x,y]
-    */
+   * Convert QR text hex value to world coordinates.
+   *
+   * @param key the hex key.
+   * @return Tuple[x,y]
+   */
   def textToXY(key: String): (Double, Double) = {
     key.split(':') match {
       case Array(q, r) => {
@@ -95,23 +95,23 @@ case class Layout(origX: Double, origY: Double, sizeX: Double, sizeY: Double, or
   }
 
   /**
-    * Convert world coordinate to a QR hex nume.
-    *
-    * @param x the world x coordinate.
-    * @param y the world y coordinate.
-    * @return a key as a Long instance.
-    */
+   * Convert world coordinate to a QR hex nume.
+   *
+   * @param x the world x coordinate.
+   * @param y the world y coordinate.
+   * @return a key as a Long instance.
+   */
   def xyToNume(x: Double, y: Double): Long = {
     val (qInt, rInt) = xy2qr(x, y)
     (qInt.toLong << 32) | (rInt.toLong & 0xFFFFFFFFL)
   }
 
   /**
-    * Convert QR hex nume to world coordinates.
-    *
-    * @param nume the qr nume value.
-    * @return (x,y)
-    */
+   * Convert QR hex nume to world coordinates.
+   *
+   * @param nume the qr nume value.
+   * @return (x,y)
+   */
   def numeToXY(nume: Long): (Double, Double) = {
     val q = nume >> 32
     val r = nume & 0xFFFFFFFFL
@@ -119,26 +119,20 @@ case class Layout(origX: Double, origY: Double, sizeX: Double, sizeY: Double, or
   }
 
   /**
-    * Calculate a hex corner world coordinates.
-    *
-    * @param corner the corner to calculate.
-    * @param cx     the hex center horizontal world location.
-    * @param cy     the hex center vertical world location.
-    * @return (x,y)
-    */
+   * Calculate a hex corner world coordinates.
+   *
+   * @param corner the corner to calculate.
+   * @param cx     the hex center horizontal world location.
+   * @param cy     the hex center vertical world location.
+   * @return (x,y)
+   */
   def cornerOffset(corner: Int, cx: Double, cy: Double): (Double, Double) = {
     (cx + sizeX * orientation.offsetX(corner), cy + sizeY * orientation.offsetY(corner))
   }
 
-  /**
-    * Calculate the sequence of the Hex XY corners.
-    *
-    * @param h the hex.
-    * @return sequence of the Hex XY corners.
-    */
-  def polygon(h: Hex): Iterable[(Double, Double)] = {
+  @inline
+  private def polygon(cx: Double, cy: Double) = {
     val arr = new ArrayBuffer[(Double, Double)](7)
-    val (cx, cy) = hexToXY(h)
     arr += cornerOffset(0, cx, cy)
     arr += cornerOffset(1, cx, cy)
     arr += cornerOffset(2, cx, cy)
@@ -146,6 +140,28 @@ case class Layout(origX: Double, origY: Double, sizeX: Double, sizeY: Double, or
     arr += cornerOffset(4, cx, cy)
     arr += cornerOffset(5, cx, cy)
     arr += arr.head
+  }
+
+  /**
+   * Calculate the sequence of the Hex XY corners given a hex instance.
+   *
+   * @param h the hex.
+   * @return sequence of the Hex XY corners.
+   */
+  def polygon(h: Hex): Iterable[(Double, Double)] = {
+    val (cx, cy) = hexToXY(h)
+    polygon(cx, cy)
+  }
+
+  /**
+   * Calculate the sequence of the Hex XY corners given a hex nume value.
+   *
+   * @param nume the hex nume value.
+   * @return sequence of the Hex XY corners.
+   */
+  def polygon(nume: Long): Iterable[(Double, Double)] = {
+    val (cx, cy) = numeToXY(nume)
+    polygon(cx, cy)
   }
 
 }
