@@ -126,6 +126,7 @@ case class Layout(origX: Double, origY: Double, sizeX: Double, sizeY: Double, or
    * @param cy     the hex center vertical world location.
    * @return (x,y)
    */
+  @inline
   def cornerOffset(corner: Int, cx: Double, cy: Double): (Double, Double) = {
     (cx + sizeX * orientation.offsetX(corner), cy + sizeY * orientation.offsetY(corner))
   }
