@@ -115,6 +115,7 @@ case class Layout(origX: Double, origY: Double, sizeX: Double, sizeY: Double, or
   def numeToXY(nume: Long): (Double, Double) = {
     val q = nume >> 32
     val r = nume & 0xFFFFFFFFL
+    // val v = -(r & 0x80000000L) << 32 >> 31 | r
     qr2xy(q.toInt, r.toInt)
   }
 
