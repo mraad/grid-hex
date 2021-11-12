@@ -1,6 +1,8 @@
 package com.esri.hex
 
-import scala.math.abs
+// import scala.math.abs
+
+import org.apache.commons.math3.util.FastMath._
 
 /**
  * Inline hex nume calculation.
@@ -57,9 +59,9 @@ object HexObj {
           ): (Double, Double) = {
     val q = nume >> 32
     val r = nume & 0xFFFFFFFFL
-    val v = -(r & 0x80000000L) << 32 >> 31 | r
-    val x = (orientation.f0 * q + orientation.f1 * v) * size
-    val y = (orientation.f2 * q + orientation.f3 * v) * size
+    // val v = -(r & 0x80000000L) << 32 >> 31 | r
+    val x = (orientation.f0 * q + orientation.f1 * r) * size
+    val y = (orientation.f2 * q + orientation.f3 * r) * size
     (x + orig, y + orig)
   }
 }
