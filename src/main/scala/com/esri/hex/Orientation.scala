@@ -7,11 +7,11 @@ import org.apache.commons.math3.util.FastMath._
 /**
  * Class to define the hex orientation, either flat top or pointy top.
  */
-case class Orientation(
-                        f0: Double, f1: Double, f2: Double, f3: Double,
-                        b0: Double, b1: Double, b2: Double, b3: Double,
-                        startAngle: Double
-                      ) {
+final case class Orientation(
+                              f0: Double, f1: Double, f2: Double, f3: Double,
+                              b0: Double, b1: Double, b2: Double, b3: Double,
+                              startAngle: Double
+                            ) {
   private val Pi_over_3 = PI / 3.0
   val offsetX: Array[Double] = Array(
     cos(Pi_over_3 * (startAngle - 0)),
@@ -32,6 +32,6 @@ case class Orientation(
 }
 
 object Orientation {
-  val TOP_FLAT: Orientation = Orientation(3.0 / 2.0, 0.0, sqrt(3.0) / 2.0, sqrt(3.0), 2.0 / 3.0, 0.0, -1.0 / 3.0, sqrt(3.0) / 3.0, 0.0)
-  val TOP_POINTY: Orientation = Orientation(sqrt(3.0), sqrt(3.0) / 2.0, 0.0, 3.0 / 2.0, sqrt(3.0) / 3.0, -1.0 / 3.0, 0.0, 2.0 / 3.0, 0.5)
+  final val TOP_FLAT: Orientation = Orientation(3.0 / 2.0, 0.0, sqrt(3.0) / 2.0, sqrt(3.0), 2.0 / 3.0, 0.0, -1.0 / 3.0, sqrt(3.0) / 3.0, 0.0)
+  final val TOP_POINTY: Orientation = Orientation(sqrt(3.0), sqrt(3.0) / 2.0, 0.0, 3.0 / 2.0, sqrt(3.0) / 3.0, -1.0 / 3.0, 0.0, 2.0 / 3.0, 0.5)
 }

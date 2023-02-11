@@ -1,7 +1,5 @@
 package com.esri.hex
 
-// import scala.math.abs
-
 import org.apache.commons.math3.util.FastMath._
 
 /**
@@ -18,12 +16,12 @@ object HexObj {
    * @param orientation  the hex orientation, flat top or pointy top.
    * @return hex nume value.
    */
-  def toNume(xMeters: Double,
-             yMaters: Double,
-             sizeInMeters: Double,
-             orig: Double = -20000000.0,
-             orientation: Orientation = Orientation.TOP_FLAT
-            ): Long = {
+  final def toNume(xMeters: Double,
+                   yMaters: Double,
+                   sizeInMeters: Double,
+                   orig: Double = -20000000.0,
+                   orientation: Orientation = Orientation.TOP_FLAT
+                  ): Long = {
     val px = (xMeters - orig) / sizeInMeters
     val py = (yMaters - orig) / sizeInMeters
     val q = orientation.b0 * px + orientation.b1 * py
@@ -52,11 +50,11 @@ object HexObj {
    * @param orientation the hex orientation.
    * @return (x,y) in meters.
    */
-  def toXY(nume: Long,
-           size: Double,
-           orig: Double = -20000000.0,
-           orientation: Orientation = Orientation.TOP_FLAT
-          ): (Double, Double) = {
+  final def toXY(nume: Long,
+                 size: Double,
+                 orig: Double = -20000000.0,
+                 orientation: Orientation = Orientation.TOP_FLAT
+                ): (Double, Double) = {
     val q = nume >> 32
     val r = nume & 0xFFFFFFFFL
     // val v = -(r & 0x80000000L) << 32 >> 31 | r

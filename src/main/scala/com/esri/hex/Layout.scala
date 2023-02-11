@@ -12,7 +12,7 @@ import scala.math.abs
  * @param sizeY       the hex y size.
  * @param orientation the hex orientation (flat top or pointy top).
  */
-case class Layout(origX: Double, origY: Double, sizeX: Double, sizeY: Double, orientation: Orientation = Orientation.TOP_FLAT) {
+final case class Layout(origX: Double, origY: Double, sizeX: Double, sizeY: Double, orientation: Orientation = Orientation.TOP_FLAT) {
 
   @inline
   private def qr2xy(q: Int, r: Int): (Double, Double) = {
@@ -38,7 +38,7 @@ case class Layout(origX: Double, origY: Double, sizeX: Double, sizeY: Double, or
    * @param y the world y coordinate.
    * @return a FractionalHex instance.
    */
-  def xyToHex(x: Double, y: Double): HexDouble = {
+   def xyToHex(x: Double, y: Double): HexDouble = {
     val px = (x - origX) / sizeX
     val py = (y - origY) / sizeY
     val q = orientation.b0 * px + orientation.b1 * py
